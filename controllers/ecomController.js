@@ -4,13 +4,14 @@ const flipkartObject = require('../middleware/flipkartScraper')
 
 
 const scrapeAmazon = async (req, res, next) =>{ 
-    const { searchQuery } = req.body;
+    const { searchQuery } = req.params;
     try{
         let browser = await browserObject.startBrowser();
         let result = await amazonObject.scraper(browser, searchQuery);
         console.log("closing browser")
         await browser.close();
-        return res.status(201).json({"msg": "success", result});
+        console.log(req.params)
+        return res.send(result);
     } catch(err) {
         console.log('Could not resolve the browser instance = ', err)
         res.status(500).send(`Internal Server Error: ${err.message}`);
